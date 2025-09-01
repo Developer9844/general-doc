@@ -1,0 +1,32 @@
+cd /usr/share/
+sudo wget https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz
+sudo tar xvf phpMyAdmin-latest-all-languages.tar.gz
+sudo mv phpMyAdmin-*-all-languages phpmyadmin
+
+
+# Create config directory:
+
+sudo mkdir /usr/share/phpmyadmin/tmp
+sudo chown -R www-data:www-data /usr/share/phpmyadmin/tmp
+
+
+# Add Apache config:
+
+sudo nano /etc/apache2/conf-available/phpmyadmin.conf
+
+
+# Paste:
+
+Alias /phpmyadmin /usr/share/phpmyadmin
+<Directory /usr/share/phpmyadmin>
+    Options FollowSymLinks
+    DirectoryIndex index.php
+    AllowOverride All
+    Require all granted
+</Directory>
+
+
+# Enable config and restart:
+
+sudo a2enconf phpmyadmin
+sudo systemctl reload apache2
