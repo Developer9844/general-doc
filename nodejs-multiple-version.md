@@ -32,6 +32,39 @@ cd() {
 load-nvmrc
 ```
 
+
+# Global Configuration
+
+curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+
+sudo mkdir -p /usr/local/nvm
+sudo curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | NVM_DIR=/usr/local/nvm bash
+
+
+sudo tee /etc/profile.d/nvm.sh <<'EOF'
+export NVM_DIR="/usr/local/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+EOF
+
+
+sudo chmod +x /etc/profile.d/nvm.sh
+
+
+source /etc/profile.d/nvm.sh
+
+echo 'source /etc/profile.d/nvm.sh' >> ~/.bashrc
+
+
+
+
+~/.bashrc:
+
+export NVM_DIR="/usr/local/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+
+source ~/.bashrc
 ```
 source ~/.bashrc
 ```
