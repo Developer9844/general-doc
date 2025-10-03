@@ -84,3 +84,44 @@ sonarqube-check:
   tags:
     - dev
 ```
+
+## Sonar qube setup in Github workflow
+
+```yaml
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  sonar-scan:
+    runs-on: self-hosted   # uses your self-hosted runner
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install PHP & Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y php-cli unzip wget
+          # If you use composer:
+          # sudo apt-get install -y composer
+          # composer install
+
+      - name: Download Sonar Scanner
+        run: |
+          wget -O sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+          unzip sonar-scanner.zip
+          mv sonar-scanner-* sonar-scanner
+          export PATH="$PWD/sonar-scanner/bin:$PATH"
+
+      - name: Run SonarQube Scan
+        run: |
+          ./sonar-scanner/bin/sonar-scanner \
+            -Dsonar.projectKey=my-php-project \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+```
